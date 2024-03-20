@@ -5,7 +5,12 @@ import collections
 
 path_pdf = './pdfFiles/'
 path_txt = './txtFiles/'
-pdflist=["Kryptografia"]
+pdflist=["Kryptografia","elektromobilnosc",
+         "elektromobilnosc2",
+         "elektromobilnosc3",
+         "Development of Electromobility in European Union Countries under COVID-19 Conditions",
+         "European government electromobility plans",
+         "The Development of Electromobility in the European Union"]
 
 class PDFConverter:
     
@@ -62,15 +67,5 @@ for item in pdflist:
     fitter = PowerLawFitter(filename)
     fitter.print_parameters()
     fitter.plot_pdf()
-#pdf_converter = PDFConverter('./pdfFiles/Kryptografia.pdf')
-#pdf_converter.convert_to_text('./txtFiles/Kryptografia.txt')
-
-#filename = './txtFiles/Kryptografia.txt'
-
-#fitter = PowerLawFitter(filename)
-#fitter.plot_pdf()
-#fitter.print_parameters()
-
-
 
 #TODO: Znajdź artykuły z 3 różnych dziedzin nauki, które zawierają dane, które można opisać rozkładem mocy. i stwórz ładną prezentacje z wykresem i opisem tych rzeczy co wypluł
