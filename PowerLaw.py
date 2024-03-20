@@ -3,6 +3,10 @@ import powerlaw as powerlaw
 import PyPDF2
 import collections
 
+path_pdf = './pdfFiles/'
+path_txt = './txtFiles/'
+pdflist=["Kryptografia"]
+
 class PDFConverter:
     
     def __init__(self, pdf_path):
@@ -22,6 +26,8 @@ class PowerLawFitter:
         self.data = self.load_data(filename)
         print(self.data)
         self.fit = powerlaw.Fit(self.data)
+        self.filename = filename
+        self.name_of_file= filename.split('/')[-1]
         
     def load_data(self, filename):
         data = []
@@ -42,18 +48,29 @@ class PowerLawFitter:
         self.fit.plot_pdf(color='red', linestyle='--', ax=figure)
         plt.xlabel('Value')
         plt.ylabel('Probability Density')
-        plt.title('Power Law Distribution')
+        plt.title('Power Law Distribution of file: '+self.name_of_file)
         plt.show()
         
     def print_parameters(self):
         print(self.fit.alpha)
         print(self.fit.xmin)
 
+for item in pdflist:
+    pdf_converter = PDFConverter(path_pdf+item+'.pdf')
+    pdf_converter.convert_to_text(path_txt+item+'.txt')
+    filename = path_txt+item+'.txt'
+    fitter = PowerLawFitter(filename)
+    fitter.print_parameters()
+    fitter.plot_pdf()
 #pdf_converter = PDFConverter('./pdfFiles/Kryptografia.pdf')
 #pdf_converter.convert_to_text('./txtFiles/Kryptografia.txt')
 
-filename = './txtFiles/Kryptografia.txt'
+#filename = './txtFiles/Kryptografia.txt'
 
-fitter = PowerLawFitter(filename)
-fitter.plot_pdf()
-fitter.print_parameters()
+#fitter = PowerLawFitter(filename)
+#fitter.plot_pdf()
+#fitter.print_parameters()
+
+
+
+#TODO: Znajdź artykuły z 3 różnych dziedzin nauki, które zawierają dane, które można opisać rozkładem mocy. i stwórz ładną prezentacje z wykresem i opisem tych rzeczy co wypluł
