@@ -1,9 +1,342 @@
-Although power-law relations are attractive for many theoretical reasons, demonstrating that data does indeed follow a power-law relation requires more than simply fitting a particular model to the data.[30] This is important for understanding the mechanism that gives rise to the distribution: superficially similar distributions may arise for significantly different reasons, and different models yield different predictions, such as extrapolation.
-
-For example, log-normal distributions are often mistaken for power-law distributions:[68] a data set drawn from a lognormal distribution will be approximately linear for large values (corresponding to the upper tail of the lognormal being close to a power law)[clarification needed], but for small values the lognormal will drop off significantly (bowing down), corresponding to the lower tail of the lognormal being small (there are very few small values, rather than many small values in a power law).[citation needed]
-
-For example, Gibrat's law about proportional growth processes produce distributions that are lognormal, although their log–log plots look linear over a limited range. An explanation of this is that although the logarithm of the lognormal density function is quadratic in log(x), yielding a "bowed" shape in a log–log plot, if the quadratic term is small relative to the linear term then the result can appear almost linear, and the lognormal behavior is only visible when the quadratic term dominates, which may require significantly more data. Therefore, a log–log plot that is slightly "bowed" downwards can reflect a log-normal distribution – not a power law.
-
-In general, many alternative functional forms can appear to follow a power-law form for some extent.[69] Stumpf & Porter (2012) proposed plotting the empirical cumulative distribution function in the log-log domain and claimed that a candidate power-law should cover at least two orders of magnitude.[70] Also, researchers usually have to face the problem of deciding whether or not a real-world probability distribution follows a power law. As a solution to this problem, Diaz[54] proposed a graphical methodology based on random samples that allow visually discerning between different types of tail behavior. This methodology uses bundles of residual quantile functions, also called percentile residual life functions, which characterize many different types of distribution tails, including both heavy and non-heavy tails. However, Stumpf & Porter (2012) claimed the need for both a statistical and a theoretical background in order to support a power-law in the underlying mechanism driving the data generating process.[70]
-
-One method to validate a power-law relation tests many orthogonal predictions of a particular generative mechanism against data. Simply fitting a power-law relation to a particular kind of data is not considered a rational approach. As such, the validation of power-law claims remains a very active field of research in many areas of modern science.[10]
+logoweii.jpg
+Systemy kryptograficzne
+Projekt
+Kryptosystem plecakowy Merklego i Hellmana
+Author: Jakub Mączka, Marcel Majcher
+14 marca 20242
+Spis treści
+1 Problem plecakowy 3
+2 Rozwój kryptosystemów plecakowych 4
+3 Kryptosystem plecakowy Merklego i Hellmana 5
+3.1 Generowanie kluczy . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+3.2 Szyfrowanie . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+3.3 Deszyfrowanie . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+4 Implementacja programistyczna kryptosystemu 8
+4.1 Implementacja mechanizmu generowania kluczy . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+4.2 Implementacja mechanizmów szyfrowania i deszyfrowania . . . . . . . . . . . . . . . . . . . . 9
+4.3 Testy poprawności działania systemu . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+5 Podsumowanie 113
+1 Problem plecakowy
+Problem plecakowy dotyczy w większości przypadków systemów architektonicznie wzorujących się na sys-
+temie Merklego-Hellmana. Samo nazewnictwo tego zagadnienia budzi jednak wiele kontrowersji. Niektórzy
+autorzy uważają, że nazwa kryptosystem plecakowy, odnosząca się do wymienionego w tytule rozdziału pro-
+blemu, jest błędna. Przyczyną takiego stanowiska jest fakt, iż kryptosystem ten oparty jest na zagadnieniach
+dotyczących sumy podzbiorów. Temat ten porusza w swoim artykule Douglas R.Stinson. Formułuje on de-
+finicję problemu plecakowego jako zwykle odnoszącego się do wyboru obiektów o określonych wartościach
+parametrów wagowych i zysku, w taki sposób, aby nie przekroczyć określonej wartości pojemności i osiągnąć
+oczekiwany, docelowy zysk. Rozważania Stinsona można zapisać za pomocą zależności (1) i (2), będących
+funkcjami sumy. [2]
+n/summationdisplay
+i=1pi·wi (1)
+gdzie:
+pijest wartością zysku dla danego obiektu
+wijest zmienną odpowiadającą wadze
+nstanowi liczbę wszystkich obiektów - np. liczb składających się na klucz publiczny
+n/summationdisplay
+i=1wi·xi∝§↕⌉∫∫⌉⨿⊓⊣↕c (2)
+gdzie:
+xistanowi zmienną binarną
+cjest zmienną odpowiadającą pojemności
+Rola xiw procesie opisanym za pomocą wzoru (2) polega na określaniu czy dany obiekt został wybrany
+do dalszych przekształceń - wartość 1. Natomiast zmienna cdotyczy wartości maksymalnej, której podczas
+rozwiązywania problemu plecakowego nie można przekraczać. Często spotykana jest też zgoła inna definicja
+problemu sumy podzbiorów od przedstawionej w tym rozdziale. W niektórych opracowaniach na ten temat
+występuje skończony zbiór liczb naturalnych, a problem polega na znalezieniu takiego pozbioru tego zbioru,
+którego elementy sumują się do wartości pewnej liczby naturalnej. Zdarzają się też opinie, dotyczące postrze-
+gania problemu sumy podzbiorów jako szczególnej formy problemu plecakowego opisanego przez Stinsona, w
+którym wartości zysków oraz wartości parametrów wagowych są równe dla wszystkich obiektów. Sam Merkle
+i Hellman w swojej pracy bardziej opowiadali się za wersją przedstawioną z użyciem wzorów (1) i (2) i to
+właśnie na niej oparli swój kryptosystem. Rozwiązuje on problem, w którym biorąc pod uwagę zbiór liczb
+całkowitych A = {a1, a2, . . . , a n}oraz liczbę całkowitą S należy zdecydować czy istnieje podzbiór A, który
+sumuje się dokładnie do S. [3]
+Analizując różne podejścia naukowe do tego typu zagadnień nie można jedoznacznie sformułować zasady
+ustanawiającej konieczność opisu tych zagadnień jako problem plecakowy, czy też problem sumy pozbiorów.
+Jedynym wyjściem z sytuacji jest dogłębna analiza danego przypadku użycia, włącznie z danymi wejściowymi,
+czy też wartościami docelowymi, które powinny zostać osiągnięte i na podstawie tego procesu określenie, czy
+mamy do czynienia z problemem plecakowym, czy problemem sumy podzbiorów. [1]
+W literaturze można znaleźć różnorodne rozwinięcia pierwotnego problemu plecakowego. Jedna z tych
+modyfikacji jest nazywana plecakiem kompaktowym (eng. compact knapsack). Roszerzenie dotyczy tu wek-
+tora binarnego xi, tj. wektora zmiennych które mogą przyjmować wartości 0 lub 1. W przypadku plecaka
+kompaktowego, ximoże przyjmować wartości ze zbioru {0,1,2, . . . , 2b−1}, gdzie b jest dodatnią liczbą
+całkowitą. Zastosowanie tego typu rozwiązania przy jednoczesnym zachowaniu przeznaczenia kryptosystemu
+wymaga wprowadzenia zmian w jego algorytmie. [4]4
+2 Rozwój kryptosystemów plecakowych
+Historia kryptosystemów plecakowych od czasu powstania, aż do ich ostatecznego skompromitowania od-
+znacza się wieloma wydarzeniami bez precedensu. Te najważniejsze, uszeregowano zgodnie z chronologią i
+przedstawiono poniżej. [1]
+•1978 r. - opracowanie przez Merklego i Hellmana kryptosystemu plecakowego, kilka miesięcy po pu-
+blikacji pierwszego kryptosystemu klucza publicznego. Merkle i Hellman opisali wersję z pojedynczą i
+wielokrotną iteracją.
+•1982 r. - udany atak Shamira na wersję kryptosystemu plecakowego z pojedynczą iteracją i modyfikacja
+oryginalnego schematu.
+•1984 r. - atak na kryptosystem plecakowy w wersji wielokrotnej iteracji przez Ernesta F. Brickell’a.
+System został złamany w 40 iteracji, w czasie około 60 minut.
+•1985 r. - publikacja Rodneya M.F Godman’a oraz AJ’a McAuley’a modułowego kryptosystemu ple-
+cakowego, opartego na chińskim twierdzeniu o resztach.
+•1985 r. - opracowanie przez Józefa Pieprzyka kryptosystemu plecakowego opartego na wielomianach.
+System ten można złamać za pomocą największego wspólnego dzielnika niektórych składników klucza
+publicznego.
+•1986 r. - publikacja Haralda Niederreitera na temat kryptosystemu plecakowego wykorzystującego
+algebraiczną teorię kodowania.
+•1987 r. - opracowanie przez Jozefa Vyskoca schematu, w którym to kryptosystem szyfruje każdy
+bit wiadomości za pomocą dwóch liczb całkowitych, z których każda jest sumą losowo wybranych
+elementów wektora ładunku.
+•1988 r. - opracowanie przez Masakatu Morii’ego oraz Masao Kasaharę kryptosystemu wykorzystują-
+cego logarytm dyskretny. Jak dotąd nie odnotowano udanych prób złamania tego kryptosystemu.
+•1989 r. - publikacja Chi-Sunga na temat ulepszenia schematu Merkle-Hellmana. Ulepszenia dotyczyłay
+zastosowania metody przesunięcia liniowego w celu poprawy bezpieczeństwa kryptosystemu.
+•1990 r. - opracowanie przez Valtteri Niemi’ego kryptosystemu opartego na plecakach modularnych.
+Kryptosystem został złamany w roku następnym.
+•1991 r. - Hussain Ali Hussain, Jafar Wadi Abdul Sada i Saad M. Kalipha opracowali wieloetapowy sys-
+temu typu trapdoor knapsack, w którym dane wyjściowe(szyfrogram) każdego etapu są traktowane jako
+dane wejściowe(tekst jawny) następnego etapu. Nie jest znany żaden skuteczny atak na ten schemat.
+•1996 r. - K.Kobayashi i M.Kimura opracowali zmodyfikowany kryptosystem plecakowy, oparty na
+nowej koncepcji, zgodnie z którą nadawcy może wybrać klucze szyfrujące posługując się danym mu
+zestawem kluczy szyfrujących.
+•1997 r. - Kouichi Itoh, Eiji Okamoto i Masahiro Mambo opracowali kryptosystem klucza publicznego,
+w którym deszyfrowanie postrzegane było jako multiplikatywny problem plecakowy. Niedługo potem
+na system przeprowadzony został atak, który udowodnił, że w praktyce klucz prywatny można uzyskać
+z klucza publicznego w mniej niż 10 minut.
+•2001 r. - Shinya Kiuchi, Yasuyuki Murakami i Masao Kasahara ulepszyli multiplikatywny system
+plecakowy przy użyciu algorytmu Schalkwijka, [1]5
+3 Kryptosystem plecakowy Merklego i Hellmana
+Algorytm szyfrowania plecakowego to kryptosystem z kluczem asymetrycznym. Do komunikacji wymagane
+są dwa klucze - publiczny i prywatny. Proces szyfrowania polega na przekształceniu wiadomości w postaci
+tekstu jawnego do postaci zaszyfrowanej z użyciem klucza publicznego. Deszyfrowanie odbywa się przy użyciu
+odpowiedniego klucza prywatnego w celu odzyskania oryginalnego tekstu jawnego.
+Algorytm w głównej mierze opiera się na przekształceniu wiadomości w serię wielu bitów, które na-
+stępne się mnożone przez inną sekwencję generowaną z użyciem super rosnących liczb całkowitych(eng.
+super-increasing integers). W ten sposób powstaje zaszyfrowany kod, który może zostać odszyfrowany je-
+dynie poprzez odtworzenie obliczeń, do których niezbędna jest wiedza na temat czynników pierwszych lub
+zaznajomienie z innymi technikami kryptograficznymi. Samo odszyfrowanie nie jest możliwe bez znajomości
+klucza prywatnego. Pewne cechy algorytmu szyfrowania plecakowego są unikalne na tle innych algorytmów
+szyfrowania. Tabela 1. przedstawia porównanie w/w algorytmu z innymi popularnymi metodami o podobnym
+przeznaczeniu. [5]
+Tabela 1: Porównanie algorytmów szyfrujących [5]
+Algorytm szyfrujący Typ szyfrowania Bezpieczeństwo Szybkość Implementacja
+Merkle-Hellman asymetryczne Podatny na algorytm LLL Wolny W przeszłości
+RSA asymetryczne Dla dużych rozmiarów klucza Wolny SSL/TLS
+AES symetryczne Odporny na znane ataki Szybki Szyfrowanie plików
+DES symetryczne Podatny na atak brute-force Szybki Zastąpiony AES’em
+Tabela 1. w dobitny sposób pokazuje, iż chociaz algorytm szyfrowania plecakowego był rewolucyjny w
+pewnym okresie historii, to jednak został on zdystansowany przez inne metody szyfrowania, głównie AES i
+DES w wielu płaszczyznach, dotyczących bezpieczeństwa, szybkości, implementacji. Zwłaszcza kwestia im-
+plementacji wydaje się w dzisiejszych czasach być problemem - próżno szukać miejsca, gdzie ten kryptosystem
+miałby zastosowanie.
+Szyfrowanie plecakowe wykazuje pewne cechy, które czynią go silną metodą szyfrującą. Jednym z głów-
+nych atutów jest złożoność procesów generowania klucza - wykorzystywana jest duża sekwencja super-
+rosnąca, która jest trudna do odtworzenia bez znajomości prawidłowej sumy podzbiorów. Fakt, że każda
+wiadomość ma swój własny losowy klucz prywatny stanowi kolejny aspekt ochronny, poniewaz uniemożliwa
+to atakującym wykorzystanie ataków z użyciem znanego tekstu jawnego. Szyfrowanie plecakowe zapewnia
+także wysoki poziom poufności wiadomości. Zaszyfrowanie jednego bitu w oryginalnej wiadomości powoduje,
+że ponad połowa zaszyfrowanych pozostałych bitów zmienia się w sposób losowy. Atak typu brute-force na
+ten typ systemu kryptograficznego nie jest stosowany z uwagi na dużą przestrzeń liczbową i wiążącą sie z
+tym ogromną potrzebną mocą obliczeniową i szerokimi ramami czasowymi, potrzebnymi do osiągnięcia celu.
+Opisując mocne strony algorytmu szyfrowania plecakowego, nie można zapominać o jego potencjalnych
+podatnościach. Jedna z nich dotyczy generowania klucza publicznego. Jeśli atakujący określi w prawidłowy
+sposób podzbiór sekwencji super-rosnącej, może złamać system szyfrowania. Dodatkowo należy pamiętać o
+aspektach implementacyjnych - użycie generatorów liczb losowych o wąskim zakresie, czy też słabej jakości
+implementacja może ułatwić złamanie kryptosystemu. Aby zaradzić tym lukom i słabościom, eksperci suge-
+rują staranne wdrażanie kryptosystemów plecakowych i regularne ich aktualizowanie w miarę pojawiania się
+kolejnych,nowych metod ataku. Pomimo obaw związanych z zagrożeniami bezpieczeństwa dotyczącymi algo-6
+rytmów szyfrowania plecakowego, pozostają one ważnymi narzędziami dla specjalistów ds. bezpieczeństwa
+informacji - oczywiście, jeśli są odpowiednio zaimplementowane i zabezpieczone przed znanymi zagroże-
+niami. [5]
+3.1 Generowanie kluczy
+Proces generowania kluczy można przedstawić za pomocą poniższej listy kroków: [1]
+1. Wybór wartości zmiennej n, odpowiadającej rozmiarowi bloku. Określenie wartości tej zmiennej de-
+terminuje poźniejszą maksymalną liczbę bitów na które może składać się szyfrowana liczba.
+2. Wybór losowej sekwencji super-rosnącej. Sprowadza się to do wylosowania nliczb, będących dodatnimi
+liczbami całkowitymi, składających się na wektor W. Etap ten można przedstawić za pomocą zależności
+(3),(4) i (5).
+W= (w1, w2, . . . , w n) (3)
+wk>k−1/summationdisplay
+i=1wi (4)
+gdzie kspełnia następujący warunek:
+1< k∝§↕⌉∫∫⌉⨿⊓⊣↕n (5)
+3. Wybór wartości zmiennej q, będącej losową liczbą całkowitą, większą niż suma wszystkich wartości
+obiektów sekwencji super-rosnącej.
+q >n/summationdisplay
+i=1wi (6)
+4. Wybór wartości zmiennej r, będącej losową liczbą całkowitą, względnie pierwszą z q, co oznacza, że
+ich największy wspólny dzielnik wynosi 1.
+5. Klucz prywatny stanowi listę elementów ( W, q, r )
+6. Klucz publiczny ma postać następującego wektora:
+B= (b1, b2, . . . , b n) (7)
+gdzie każdy element obliczany jest za pomocą wzoru (8)
+bi=rwimodq (8)
+3.2 Szyfrowanie
+Proces szyfrowania można przedstawić w następujących etapach: [1]
+1. Utworzenie zmiennej mbędącej n- bitową wiadomością o strukturze:
+m= (m1, m2, . . . , m n) (9)
+gdzie m1reprezentuje najstarszy bit
+2. Wybór wartości biz klucza publicznego, zgodnie z wartością indeksu iteracyjnego dla rozpatrywanego
+bitumi, a następnie muptiplikacja wartości 0-1 i wartości liczbowej.
+3. Utworzenie zmiennej creprezentującej szyfrogram i nadanie jej wartości równej sumie obliczonych w
+kroku 2. wyrażeń.
+c=n/summationdisplay
+i=1mibi (10)7
+3.3 Deszyfrowanie
+Proces deszyfrowania dotyczy znalezienia takiego podzbioru B, który zsumowany da wartość c. Jest to
+realizowane według poniższej listy kroków: [1]
+1. Utworzenie zmiennej r′będącej modularną odwrotnoścą rmodulo q, której wartość obliczana jest za
+pomocą rozszerzonego algorytmu Euklidesa, zgodnie z poniższą zależnością:
+r′:=r−1(mod q) (11)
+gdzie konieczne jest spełnienie warunku NWD( q,r) = 1
+2. Utworzenie i obliczenie wartości zmiennej c′, będącej przekształceniem szyfrogramu.
+c′:=cr′(mod q) (12)
+3. Rozwiązanie problemu sumy podzbiorów dla zmiennej c′z użyciem liczb wchodzących w skład wektora
+super-rosnącego W. Spełniona musi być zależność (13)
+c′=k/summationdisplay
+i=1wxi (13)
+gdzie xito elementy listy X zawierającej indeksy, pod którymi znajdują się wartości z sekwencji super-
+rosnącej, które zsumowane są równe zmiennej c′. Utworzenie tej listy indeksów można przedstawić w
+pięciu krokach.
+1. Inicjalizacja pustej listy X.
+2. Znalezienie największego elementu z wektora super-rosnącego W, ale jednocześnie o wartości
+mniejszej lub równej c′i oznaczenie go jako wj.
+3. Wykonanie operacji odejmowania:
+c′:=c′−wj (14)
+4. Dodanie indeksu jdo listy X
+5. Sprawdzenie, czy c′jest większe od zera, jeśli tak to powrót do kroku 2.
+4. Deszyfracja wiadomości zaszyfrowanej z użyciem operacji sumy ze wzoru (15)
+m=k/summationdisplay
+i=12n−xi(15)8
+4 Implementacja programistyczna kryptosystemu
+Kryptosystem został zaimplementowany przy użyciu języka Python w wersji 3.11.3. Dokonuje on szyfro-
+wania i deszyfrowania wiadomości zapisywanych w systemie binarnym. Podczas tworzenia kryptosystemu
+wykorzystano dwie biblioteki:
+•random - użyta do generowania liczb losowych
+•math - użyta do wyznaczania wartości z użyciem operacji matematycznych, takich jak wyznaczenie
+NWD
+4.1 Implementacja mechanizmu generowania kluczy
+Ważnym aspektem generowania kluczy była metoda generująca sekwencję liczb super-rosnących. Przy two-
+rzeniu tej struktury zdecydowano się na listę, która w języku Python odznacza się szybkim dostępem do
+każdego jej elementu. Co najważniejsze, w tej sytuacji każdy z kolejno dodawanych elementów musiał być
+większy niż suma wszystkich poprzednich. Kod metody przedstawiono na listingu 1.
+1def generate_random_superincreasing_sequence (n):
+2 sequence = [ ]
+3 sequence . append ( random . randint (1 ,10))
+4 i = len ( sequence )
+5 for i in range (n):
+6 additionalElement = sum( sequence )+ random . randint (1 ,10)
+7 sequence . append ( additionalElement )
+8 return sequence
+Listing 1: Metoda generująca wektor liczb super-rosnących
+Zmienną qwygenerowano z użyciem funkcji z biblioteki random. Wynik musiał jednak spełniać jeden warunek
+- stanowić wartość większą niż suma elementów wektora liczb super-rosnących. Wartość zmiennej r, była
+generowana losowo w przedziale <1,10>, przy czym konieczne było spełnienie warunku NWD( r,q) = 1.
+Wartości NWD obliczano za pomocą funkcji gcd z biblioteki math. Opisywane metody przedstawione są na
+listingu 2.
+1def generate_q ( superIncreasing_sequence ):
+2 q = sum ( superIncreasing_sequence ) + random . randint (1 ,10)
+3 return q
+4
+5def generate_r ( qValue ):
+6 r = random . randint (1 ,10)
+7 while ( math . gcd (r, qValue ) != 1):
+8 r = random . randint (1 ,10)
+9 return r
+Listing 2: Metody generujące q i r
+Klucz prywatny generowany jest z użyciem wektora liczb super-rosnących, oraz wartości zmiennych qir.
+Funkcjonalność tą, realizuje metoda z listingu 3.
+1def generate_private_key ( superIncreasing_sequence , qValue , rValue ):
+2 privateKey = []
+3 for i in superIncreasing_sequence :
+4 privateKey . append (i)
+5 privateKey . append ( qValue )
+6 privateKey . append ( rValue )
+7 return privateKey
+Listing 3: Metoda generująca klucz prywatny9
+Klucz publiczny jest tworzony za pomocą operacji (8), gdzie każdy element wektora liczb super-rosnących jest
+poddawany odpowiednim przekształceniom matematycznym. Realizująca ten proces metoda przedstawiona
+jest na listingu 4.
+1def generate_private_key ( superIncreasing_sequence , qValue , rValue ):
+2 privateKey = []
+3 for i in superIncreasing_sequence :
+4 privateKey . append (i)
+5 privateKey . append ( qValue )
+6 privateKey . append ( rValue )
+7 return privateKey
+Listing 4: Metoda generująca klucz publiczny
+4.2 Implementacja mechanizmów szyfrowania i deszyfrowania
+Mechanizm szyfrowania oparty jest na zamianie oryginalnej wiadomości zapisanej w tekście jawnym, na
+liczbę zapisaną w systemie dziesiętnym. Warto wspomnieć, że wiadomości wejściowe są ciągiem zer i jedynek
+- algorytm, natrafiając na wartość 1 w ciągu znaków, odczytuje indeks pod którym się ta wartość znajduje
+i używa go do odczytania prawidłowego elementu klucza publicznego. Element ten jest sumowany wraz z
+innymi uzyskanymi w ten sposób, tworząc zaszyfrowaną wiadomość. Metodę realizującą tą funkcjonalność
+przedstawia listing 5.
+1def knapsack_encryption ( textToEncrypt , publicKey ):
+2 encryptedMessage = 0
+3 for i in range ( len ( textToEncrypt )):
+4 if textToEncrypt [i ]== ’1’:
+5 encryptedMessage += publicKey [i]
+6 return encryptedMessage
+Listing 5: Metoda szyfrująca
+Deszyfrowanie odbywa się z udziałem klucza prywatnego. Głównym problemem rozwiązywanym podczas
+deszyfrowania jest znalezienie sumy podzbiorów dla zmiennej, w tym przypadku - c′, z użyciem liczb wcho-
+dzących w sklad wektora super-rosnącego W. Metoda z listingu 6. realizuje to zadanie najpierw inicjalizując
+listęwElements wartościami elementów klucza prywatnego, z wyjątkiem dwóch ostatnich, odpowiadających
+zmiennym qir, a następnie szukając każdorazowo maksimum tej listy, a po odjęciu maksimum usuwając
+wspomniany element z listy wElements . Indeksy, pod którymi znajdowały się wartości maksymalne są do-
+dawane do listy X, a następnie, z użyciem operacji potęgowania i sumy tworzona jest na ich podstawie
+zdeszyfrowana wiadomość, zapisana w formacie dziesiętnym.
+1def knapsack_encryption ( textToEncrypt , publicKey ):
+2 encryptedMessage = 0
+3 for i in range ( len ( textToEncrypt )):
+4 if textToEncrypt [i ]== ’1’:
+5 encryptedMessage += publicKey [i]
+6 return encryptedMessage
+Listing 6: Metoda deszyfrująca10
+4.3 Testy poprawności działania systemu
+Aby uzyskać informacje, czy system działa w sposób prawidłowy, konieczne było stworzenie jeszcze jednej
+metody. Metoda realizująca funkcjonalność związaną z deszyfrowaniem zwraca wynik w systemie dziesiętnym,
+stąd z zamiarem umożliwienia porównania wyniku z danymi wejściowymi w postaci binarnej, opracowano
+metodę, będącą konwerterem binarnym, widoczną na listingu 7.
+1def decimal_to_binary ( decryptedMessage ):
+2 binaryMessage = ""
+3 if decryptedMessage == 0:
+4 return "0"
+5 while decryptedMessage > 0:
+6 binaryMessage = str ( decryptedMessage % 2) + binaryMessage
+7 decryptedMessage //= 2
+8 return binaryMessage
+Listing 7: Metoda konwertująca na system binarny
+Środowisko testowe zaprojektowano tworząc wywołania wszystkich dostępnych metod, a ich wyniki przekazu-
+jąc sukcesywnie do kolejnych następujących po sobie w ramach procedury działania algorytmu. Postanowiono
+zaimplementować wyświetlanie wartości istotnych zmiennych, tak aby lepiej przetestować działanie systemu.
+1superIncreasing_sequence = generate_random_superincreasing_sequence (9)
+2print (" Superincreasing sequence ", superIncreasing_sequence )
+3q = generate_q ( superIncreasing_sequence )
+4print ("q", q)
+5r = generate_r (q)
+6print ("r",r)
+7privateKey = generate_private_key ( superIncreasing_sequence ,q,r)
+8print (" Private key ", privateKey )
+9publicKey = generate_public_key ( superIncreasing_sequence ,q,r)
+10print (" Public key", publicKey )
+11originalMessage = ’111101110 ’
+12print (" Original Message ", originalMessage )
+13encryptedMessage = knapsack_encryption ( originalMessage , publicKey )
+14print (" Encrypted Message ", encryptedMessage )
+15decryptedMessage = knapsack_decryption ( encryptedMessage , privateKey ,q,r)
+16binaryMessage = decimal_to_binary ( decryptedMessage )
+17print (" Decrypted Message ", binaryMessage )
+Listing 8: Środowisko testowe
+Działanie systemu zdecydowano się przetestować z użyciem wiadomości o treści ’111101110’. System zwrócił
+wartości widoczne na rysunku 1.
+Rysunek 1: Wyniki działania systemu11
+5 Podsumowanie
+Analizując rysunek 1. można stwierdzić, iż wiadomość oryginalna została zaszyfrowana i odszyfrowana w
+prawidłowy sposób.12
+Literatura
+[1] Knapsack Cryptosystems: The Past and the Future, Ming Kin Lai,Department of Information and Com-
+puter Science, University of California Irvine, CA 92717-3425, USA, Email: mingl@ics.uci.edu, March
+2001
+[2] Douglas R. Stinson. Cryptography Theory and Practice. CRC Press, Boca Raton, 1995.
+[3] Alfred V. Aho, John E. Hopcroft, Jeffrey D. Ullman. The Design and Analysis of Computer Algorithms.
+Addison-Wesley, Reading, MA, 1974.
+[4] Ralph C. Merkle, Martin E. Hellman. Hiding Information and Signatures in Trapdoor Knapsacks. IEEE
+Transactions on Information Theory, vol. IT-24, 1978, pp. 525-530.
+[5] Knapsack Encryption Algorithm in Cryptography,https://www.tutorialspoint.com/knapsack-encryption-
+algorithm-in-cryptography, dostęp 14.03.2024
