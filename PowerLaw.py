@@ -5,9 +5,9 @@ import collections
 
 path_pdf = './pdfFiles/'
 path_txt = './txtFiles/'
-pdflist=["Kryptografia","elektromobilnosc",
-         "elektromobilnosc2",
-         "elektromobilnosc3",
+pdflist=["elektromobilność w europie - perspektywy jej wdrożenia w polsce",
+         "elektromobilność w polsce inwestycje, trendy, zatrudnienie",
+         "rozwój elektromobilności w polsce. uwarunkowania, cele i bariery",
          "Development of Electromobility in European Union Countries under COVID-19 Conditions",
          "European government electromobility plans",
          "The Development of Electromobility in the European Union"]
